@@ -18,7 +18,9 @@ final class MwStRechner {
          * ermöglicht einen einheitlichen Zugriff
          */
         public static double calculateMwSt(Kunde kunde, double wert) {
-            return calculateMwSt(kunde, wert);
+            if (kunde instanceof Privatkunde p) return calculateMwSt(p, wert);
+            else if (kunde instanceof Businesskunde b) return calculateMwSt(b, wert);
+            else throw new IllegalArgumentException("Unsupported type: " + kunde.getClass());
         }
 
         /**
