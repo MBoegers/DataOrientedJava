@@ -18,7 +18,13 @@ final class MwStRechner {
          * ermöglicht einen einheitlichen Zugriff
          */
         public static double calculateMwSt(Kunde kunde, double wert) {
-            return calculateMwSt(kunde, wert);
+            if (kunde instanceof Privatkunde) {
+                return calculateMwSt((Privatkunde) kunde, wert);
+            } else if (kunde instanceof Businesskunde) {
+                return calculateMwSt((Businesskunde) kunde, wert);
+            } else {
+                throw new IllegalArgumentException("Typ %s nicht implementiert".formatted(kunde));
+            }
         }
 
         /**
