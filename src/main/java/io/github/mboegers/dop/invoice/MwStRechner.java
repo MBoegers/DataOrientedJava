@@ -1,5 +1,7 @@
 package io.github.mboegers.dop.invoice;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * Berechne MwSt für verschiedene Arten von Kunden
  */
@@ -18,6 +20,7 @@ final class MwStRechner {
          * ermöglicht einen einheitlichen Zugriff
          */
         public static double calculateMwSt(Kunde kunde, double wert) {
+            requireNonNull(kunde);
             if (kunde instanceof Privatkunde) {
                 return calculateMwSt((Privatkunde) kunde, wert);
             } else if (kunde instanceof Businesskunde) {
@@ -50,6 +53,7 @@ final class MwStRechner {
         }
 
         public static double calculateMwSt(Kunde kunde, double wert) {
+            requireNonNull(kunde);
             if (kunde instanceof Businesskunde b) { // abhängig von dem Vorsteuerabzug
                 if (b.isVorsteuerAbzugsberechtigt()) return 0.0d;
                 else return wert * 0.1d;
@@ -69,6 +73,7 @@ final class MwStRechner {
         }
 
         public static double calculateMwSt(Kunde kunde, double wert) {
+            requireNonNull(kunde);
             return switch (kunde) {
                 case Businesskunde b -> {
                     if (b.isVorsteuerAbzugsberechtigt()) yield 0.0d;
@@ -87,6 +92,7 @@ final class MwStRechner {
         }
 
         public static double calculateMwSt(Kunde kunde, double wert) {
+            requireNonNull(kunde);
             return switch (kunde) {
                 case Businesskunde b when b.isVorsteuerAbzugsberechtigt() -> 0.0d;
                 case Businesskunde b -> wert * 0.1d;

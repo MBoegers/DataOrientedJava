@@ -12,7 +12,10 @@ class Main {
         switch (rechnung) {
             case InterneVerechnung(var abt, double wert) -> Dummy.storeInDB(abt, wert);
             case ExternVersandt(Kunde kunde, var wert) -> {
-                double mwst = MwStRechner.SwitchExpressionWhenClause.calculateMwSt(kunde, wert);
+                //double mwst = MwStRechner.SwitchExpressionWhenClause.calculateMwSt(kunde, wert);
+                //double mwst = MwStRechner.SwichExpression.calculateMwSt(kunde, wert);
+                //double mwst = MwStRechner.InstanceOfPattern.calculateMwSt(kunde, wert);
+                double mwst = MwStRechner.PlainOOP.calculateMwSt(kunde, wert);
                 var txt = formatMail(kunde.name(), wert, mwst);
                 Dummy.sendViaMail(kunde.mail(), txt);
             }
