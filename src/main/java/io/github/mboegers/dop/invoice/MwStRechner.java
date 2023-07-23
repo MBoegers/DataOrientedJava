@@ -18,6 +18,7 @@ final class MwStRechner {
 
         /**
          * ermöglicht einen einheitlichen Zugriff
+         * Java 7 kompatibel
          */
         public static double calculateMwSt(Kunde kunde, double wert) {
             requireNonNull(kunde);
@@ -26,7 +27,7 @@ final class MwStRechner {
             } else if (kunde instanceof Businesskunde) {
                 return calculateMwSt((Businesskunde) kunde, wert);
             } else {
-                throw new IllegalArgumentException("Typ %s nicht implementiert".formatted(kunde));
+                throw new IllegalArgumentException(String.format("Typ %s nicht implementiert", kunde));
             }
         }
 
@@ -47,6 +48,7 @@ final class MwStRechner {
 
     /**
      * Verwendung JEP 394: Pattern Matching for instanceof https://openjdk.org/jeps/394
+     * Java 16 Final
      */
     final class InstanceOfPattern {
         private InstanceOfPattern() {
@@ -66,7 +68,8 @@ final class MwStRechner {
     }
 
     /**
-     * Verwendung von JEP 433: Pattern Matching for switch (Fourth Preview) https://openjdk.org/jeps/433
+     * Verwendung von JEP 441: Pattern Matching for switch https://openjdk.org/jeps/441
+     * Java 21 Final
      */
     final class SwichExpression {
         private SwichExpression() {
@@ -85,7 +88,8 @@ final class MwStRechner {
     }
 
     /**
-     * Verwendung von JEP 433: Pattern Matching for switch (Fourth Preview) https://openjdk.org/jeps/433 und when-Clause
+     * Verwendung von JEP 441: Pattern Matching for switch https://openjdk.org/jeps/441 und when-Clause
+     * Java 21 Final
      */
     final class SwitchExpressionWhenClause {
         private SwitchExpressionWhenClause() {
@@ -97,6 +101,66 @@ final class MwStRechner {
                 case Businesskunde b when b.isVorsteuerAbzugsberechtigt() -> 0.0d;
                 case Businesskunde b -> wert * 0.1d;
                 case Privatkunde p -> wert * 0.1d;
+            };
+        }
+
+    }
+
+    /**
+     * Verwendung von JEP 440: Record Patterns https://openjdk.org/jeps/440 Dekonstruktion
+     * Java 21 Final
+     */
+    final class SwitchExpressionWhenClauseDeconstruct {
+        private SwitchExpressionWhenClauseDeconstruct() {
+        }
+
+        public static double calculateMwSt(Kunde kunde, double wert) {
+            requireNonNull(kunde);
+            return switch (kunde) {
+                case Businesskunde(String name, String mail, boolean isVorsteuerAbzugsberechtigt)
+                        when isVorsteuerAbzugsberechtigt -> 0.0d;
+                case Businesskunde b -> wert * 0.1d;
+                case Privatkunde p -> wert * 0.1d;
+            };
+        }
+
+    }
+
+    /**
+     * Verwendung von JEP 440: Record Patterns https://openjdk.org/jeps/440 Dekonstruktion mit Inference
+     * Java 21 Final
+     */
+    final class SwitchExpressionWhenClauseDeconstructVar {
+        private SwitchExpressionWhenClauseDeconstructVar() {
+        }
+
+        public static double calculateMwSt(Kunde kunde, double wert) {
+            requireNonNull(kunde);
+            return switch (kunde) {
+                case Businesskunde(var name, var mail, var isVorsteuerAbzugsberechtigt)
+                        when isVorsteuerAbzugsberechtigt -> 0.0d;
+                case Businesskunde b -> wert * 0.1d;
+                case Privatkunde p -> wert * 0.1d;
+            };
+        }
+
+    }
+
+    /**
+     * Verwendung von JEP 443: Unnamed Patterns and Variables (Preview) https://openjdk.org/jeps/443 Unnamed Variable Pattern
+     * Java 21 Preview
+     */
+    final class SwitchExpressionWhenClauseUnnamed {
+        private SwitchExpressionWhenClauseUnnamed() {
+        }
+
+        public static double calculateMwSt(Kunde kunde, double wert) {
+            requireNonNull(kunde);
+            return switch (kunde) {
+                case Businesskunde(var _, var _, var isVorsteuerAbzugsberechtigt)
+                        when isVorsteuerAbzugsberechtigt -> 0.0d;
+                case Businesskunde _ -> wert * 0.1d;
+                case Privatkunde _ -> wert * 0.1d;
             };
         }
 
