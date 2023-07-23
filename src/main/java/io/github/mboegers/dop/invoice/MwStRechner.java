@@ -150,6 +150,7 @@ final class MwStRechner {
      * Verwendung von JEP 443: Unnamed Patterns and Variables (Preview) https://openjdk.org/jeps/443 Unnamed Variable Pattern
      * Java 21 Preview
      */
+    /*
     final class SwitchExpressionWhenClauseUnnamed {
         private SwitchExpressionWhenClauseUnnamed() {
         }
@@ -165,5 +166,6 @@ final class MwStRechner {
         }
 
     }
+    */
 }
 

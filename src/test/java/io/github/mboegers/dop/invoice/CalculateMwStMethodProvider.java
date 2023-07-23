@@ -21,8 +21,8 @@ class CalculateMwStMethodProvider implements ArgumentsProvider {
             MwStRechner.SwichExpression::calculateMwSt,
             MwStRechner.SwitchExpressionWhenClause::calculateMwSt,
             MwStRechner.SwitchExpressionWhenClauseDeconstruct::calculateMwSt,
-            MwStRechner.SwitchExpressionWhenClauseDeconstructVar::calculateMwSt,
-            MwStRechner.SwitchExpressionWhenClauseUnnamed::calculateMwSt);
+            MwStRechner.SwitchExpressionWhenClauseDeconstructVar::calculateMwSt);
+    /*MwStRechner.SwitchExpressionWhenClauseUnnamed::calculateMwSt*/
 
     @Override
     public Stream<? extends Arguments> provideArguments(ExtensionContext context) throws Exception {

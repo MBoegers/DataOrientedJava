@@ -18,6 +18,12 @@ dependencies {
     testImplementation('org.assertj:assertj-core')
 }
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(20))
+    }
+}
+
 compileTestJava {
     options.compilerArgs += ['--enable-preview']
 }
