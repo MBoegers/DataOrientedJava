@@ -5,21 +5,24 @@ import static java.util.Objects.requireNonNull;
 /**
  * Berechne MwSt für verschiedene Arten von Kunden
  */
-final class MwStRechner {
+public final class MwStRechner {
     private MwStRechner() {
     }
 
     /**
      * Verwende Plain OOP Mittel
+     * Berechnung der MwSt für einen Privatkunden beim Einkauf in Höhe von 1055
+     * {@snippet :
+     *   var kunde = new Privatkunde("Merlin", "");
+     *   var wert = 1055d;
+     *   // ...
+     *   var mwst = MwStRechner.PlainOOP.calculateMwSt(kunde, wert);
+     *}
      */
-    final class PlainOOP {
+    public final class PlainOOP {
         private PlainOOP() {
         }
 
-        /**
-         * ermöglicht einen einheitlichen Zugriff
-         * Java 7 kompatibel
-         */
         public static double calculateMwSt(Kunde kunde, double wert) {
             requireNonNull(kunde);
             if (kunde instanceof Privatkunde) {
@@ -49,8 +52,9 @@ final class MwStRechner {
     /**
      * Verwendung JEP 394: Pattern Matching for instanceof https://openjdk.org/jeps/394
      * Java 16 Final
+     * {@snippet class = "SwitchExpressionsSnippets" region = "example"}
      */
-    final class InstanceOfPattern {
+    public final class InstanceOfPattern {
         private InstanceOfPattern() {
         }
 
@@ -70,6 +74,7 @@ final class MwStRechner {
     /**
      * Verwendung von JEP 441: Pattern Matching for switch https://openjdk.org/jeps/441
      * Java 21 Final
+     * {@snippet class = "Main" region = "example"}
      */
     final class SwichExpression {
         private SwichExpression() {
@@ -150,7 +155,6 @@ final class MwStRechner {
      * Verwendung von JEP 443: Unnamed Patterns and Variables (Preview) https://openjdk.org/jeps/443 Unnamed Variable Pattern
      * Java 21 Preview
      */
-    /*
     final class SwitchExpressionWhenClauseUnnamed {
         private SwitchExpressionWhenClauseUnnamed() {
         }
@@ -166,6 +170,5 @@ final class MwStRechner {
         }
 
     }
-    */
 }
 
