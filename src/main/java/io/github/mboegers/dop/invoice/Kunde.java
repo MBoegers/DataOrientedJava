@@ -1,20 +1,10 @@
 package io.github.mboegers.dop.invoice;
 
-/**
- * lksdj
- */
-public sealed interface Kunde permits Privatkunde, Businesskunde {
-    /**
-     * adad
-     *
-     * @return adad
-     */
-    String name();
-
-    /**
-     * asdad
-     * @return asdad
-     */
-    String mail();
+sealed interface Kunde permits Privatkunde, Businesskunde {
 }
 
+record Privatkunde(String name, String mail) implements Kunde {
+}
+
+record Businesskunde(String name, String mail, boolean isVorsteuerAbzugsberechtigt) implements Kunde {
+}
