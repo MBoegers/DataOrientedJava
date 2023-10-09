@@ -8,6 +8,8 @@ import static java.util.FormatProcessor.FMT;
 
 class Main {
 
+    //region One method style
+
     /**
      * Behandle eine Rechnung abhing davon, ob sie intern oder extern ist.
      * Verwendet
@@ -18,17 +20,15 @@ class Main {
     static void sendInvoiceFor(Rechnung rechnung) {
         switch (rechnung) {
             case InterneVerechnung(var abt, double wert) -> storeInDB(abt, wert);
-            case ExternVersandt(var kunde, var wert) -> {
-                double mwst = MwStRechner.SwitchExpressionWhenClauseUnnamed.calculateMwSt(kunde, wert);
-
-                switch (kunde) {
-                    case Privatkunde(String name, String address) ->
-                            sendViaMail(address, formatInvoiceText(name, wert, mwst));
-                    case Businesskunde(var name, var address, _) ->
-                            sendViaMail(address, formatInvoiceText(name, wert, mwst));
-                }
-                ;
+            case ExternVersandt(Privatkunde(var name, var address), var wert) -> {
+                var mwst = wert * 0.1;
+                var text = formatInvoiceText(name, wert, mwst);
+                sendViaMail(address, text);
             }
+            case ExternVersandt(Businesskunde(var name, var address, var isAbzugBerechtigt), double wert)
+                    when isAbzugBerechtigt -> sendViaMail(address, formatInvoiceText(name, wert, 0d));
+            case ExternVersandt(Businesskunde(var name, var address, _), double wert) ->
+                    sendViaMail(address, formatInvoiceText(name, wert, wert * 0.1));
         }
     }
 
@@ -42,6 +42,41 @@ class Main {
         """ ;
         return txt;
     }
+
+    // endregion
+
+    //region Delegate Style
+    static void sendInvoiceFor2(Rechnung rechnung) {
+        switch (rechnung) {
+            case InterneVerechnung(var abt, double wert) -> storeInDB(abt, wert);
+            case ExternVersandt(Kunde kunde, var wert) -> {
+                var mwst = MwStRechner.SwitchExpressionWhenClauseUnnamed.calculateMwSt(kunde, wert);
+
+                var text = produceInvoiceText(kunde, wert, mwst);
+
+                switch (kunde) {
+                    case Privatkunde(_, var address) -> sendViaMail(address, text);
+                    case Businesskunde(_, var address, _) -> sendViaMail(address, text);
+                }
+            }
+        }
+    }
+
+    private static String produceInvoiceText(Kunde kunde, double wert, double mwst) {
+        var kundeName = switch (kunde) {
+            case Privatkunde(String name, var _) -> name;
+            case Businesskunde(var name, _, _) -> name;
+        };
+
+        return FMT. """
+            Hallo \{ kundeName },
+            Bitte senden Sie uns den Rechnungsbetrag in Höhe von %.2f\{ wert }€ plus %.2f\{ mwst }€ MwSt.
+
+            Mit freundlichen Grüßen
+            Merlin Bögershausen
+        """ ;
+    }
+    //endregion
 
     public static void main(String[] args) {
         System.out.println("Behandle Rechnung");

@@ -160,7 +160,6 @@ public final class MwStRechner {
         }
 
         public static double calculateMwSt(Kunde kunde, double wert) {
-            requireNonNull(kunde);
             return switch (kunde) {
                 case Businesskunde(String _, _, var isVorsteuerAbzugsberechtigt)
                         when isVorsteuerAbzugsberechtigt -> 0.0d;
